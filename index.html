@@ -153,52 +153,6 @@
       </div>
     </div>
     <div class="container-fluid p-t-2" id='tables-and-charts'>
-      <div class="row">
-        <div class="col-sm-12">
-          <button class="export-button clearfix pull-right" id="export" data-export="export" style="display:none;">Export Table</button>
-        </div>
-      </div>
-      <div class="row" id="table">
-        <div class="col-sm-12 m-t-4 clearfix marketing-div">
-          <table class="table table-bordered tablesorter" id="marketing-table">
-          </table>
-        </div>
-      </div>
-      <div class="row">
-        <div class="clearfix col-sm-12" id='selectors'>
-          <div class="clearfix pull-left" style="padding-top: 11px">
-            <div id="table-edit"  style="disply:none;"><button class="btn edit-table-btn" id="table-edit-button">Edit Table Events</button></div>
-            <div class="col-sm-6 text-uppercase text-muted " id="selector-text" style="display:none"><u><b>Event to remove:</b></u></div>
-            <div class="col-sm-6" id="new-event" style="display:none;"></div>
-            <div class="col-sm-6" id="table-selector" style="display:none;"></div>
-
-          </div>
-          <!-- pager -->
-          <div class="dropdown">
-            <div id="pager" class="pager clearfix pull-right">
-              <form style="disply:none" id="pager-controls">
-                <i class="first table-control fa fa-fast-backward" aria-hidden="true" id="table-controls" style="padding-top: 2px;"></i>
-                <!-- <img src="assets/img/chapter_previous.png" class="first table-control" id="table-controls" /> -->
-                <i class="prev fa fa-step-backward" aria-hidden="true" id="table-controls"></i>
-                <!-- <img src="assets/img/previous.png" class="prev" id="table-controls"/> -->
-                <span class="pagedisplay"></span> <!-- this can be any element, including an input -->
-                <i class="next fa fa-step-forward" aria-hidden="true" id="table-controls"></i>
-                <!-- <img src="assets/img/next.png" class="next" id="table-controls"/> -->
-                <i class="last fa fa-fast-forward" aria-hidden="true" id="table-controls"></i>
-                <!-- <img src="assets/img/chapter_next.png" class="last" id="table-controls"/> -->
-                  <select class="pagesize mp-button">
-                    <option value="5">5</option>
-                    <option value="10">10</option>
-                    <option value="20">20</option>
-                    <option value="30">30</option>
-                    <option value="50">50</option>
-                    <option value="all">All Rows</option>
-                  </select>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
       <div class='row' id='headers'>
         <div class="col-sm-6">
           <h4 class="text-center  text-muted" id="dau-chart-header" style="display: none"><u>Daily Active Users</u></h4>
@@ -215,10 +169,66 @@
           <div id='mau-chart'></div>
         </div>
       </div>
+      <!-- title header button row -->
+      <div class="row">
+        <div class="col-sm-12">
+          <h4 class="text-center text-muted" id="marketing-table-header" style="display: none;"><u>Campaign ROI</u></h4>
+        </div>
+        <div class="row" id="loading-container">
+          <div class="center-block text-center">
+            <i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+            <span class="sr-only">Loading...</span>
+          </div>
+        </div>
+      <!-- export button row -->
+      <div class="row">
+        <div class="col-sm-12">
+          <button class="export-button clearfix pull-right" id="export" data-export="export" style="display:none;">Export Table</button>
+        </div>
+      </div><!--  end export button row -->
+      <!-- start marketing table -->
+      <div class="row" id="table">
+        <div class="col-sm-12 m-t-4 clearfix marketing-div">
+          <table class="table table-bordered tablesorter" id="marketing-table">
+          </table>
+        </div>
+      </div> <!-- end marketing table-->
+      <!-- start of edit table and page selectors -->
+      <div class="row">
+        <!-- start of table editor selectors -->
+        <div class="clearfix col-sm-12" id='selectors'>
+          <div class="clearfix pull-left" style="padding-top: 11px">
+            <div id="table-edit"  style="display:none"><button class="btn edit-table-btn" id="table-edit-button">Edit Table Events</button></div>
+            <div class="col-sm-6 text-uppercase text-muted " id="selector-text" style="display:none"><u><b>Event to remove:</b></u></div>
+            <div class="col-sm-6" id="new-event" style="display:none;"></div>
+            <div class="col-sm-6" id="table-selector" style="display:none;"></div>
+          </div> <!-- end of table editor selectors -->
+          <!-- start pager controls -->
+          <div class="dropdown" style="display: none">
+            <div id="pager" class="pager clearfix pull-right">
+              <form id="pager-controls">
+                <i class="first table-control fa fa-fast-backward" aria-hidden="true" id="table-controls" style="padding-top: 2px;"></i>
+                <i class="prev fa fa-step-backward" aria-hidden="true" id="table-controls"></i>
+                <span class="pagedisplay"></span> <!-- this can be any element, including an input -->
+                <i class="next fa fa-step-forward" aria-hidden="true" id="table-controls"></i>
+                <i class="last fa fa-fast-forward" aria-hidden="true" id="table-controls"></i>
+                <select class="pagesize mp-button">
+                  <option value="5">5</option>
+                  <option value="10">10</option>
+                  <option value="20">20</option>
+                  <option value="30">30</option>
+                  <option value="50">50</option>
+                  <option value="all">All Rows</option>
+                </select>
+              </form>
+            </div>
+          </div> <!-- end pager controls -->
+        </div> <!-- end of edit table and page selectors -->
+      </div> <!-- end of edit table and page selectors container row-->
       <div class="row">
         <div class="row" id="headers">
           <div class="col-sm-12">
-            <h4 class="text-center text-muted" id="avg-campaign-header" style="diplay: none;"><u>Avg. Events Per User By Campaign</u></h4>
+            <h4 class="text-center text-muted" id="avg-campaign-header" style="display: none;"><u>Avg. Events Per User By Campaign</u></h4>
           </div>
         </div>
         <div class="row">
@@ -228,7 +238,7 @@
         </div>
         <div class="row" id="headers">
           <div class="col-sm-12">
-            <h4 class="text-center text-muted" id="avg-per-user-header" style="diplay: none;"><u>Avg. Events Per User</u></h4>
+            <h4 class="text-center text-muted" id="avg-per-user-header" style="display: none;"><u>Avg. Events Per User</u></h4>
           </div>
         </div>
         <div class="row">
@@ -238,7 +248,7 @@
         </div>
         <div class="row" id="headers">
           <div class="col-sm-12">
-            <h4 class="text-center text-muted" id="avg-per-user-header" style="diplay: none;"><u>Campaign Bounce Rate</u></h4>
+            <h4 class="text-center text-muted" id="bounce-rate-header" style="display: none;"><u>Campaign Bounce Rate</u></h4>
           </div>
         </div>
         <div class="row">

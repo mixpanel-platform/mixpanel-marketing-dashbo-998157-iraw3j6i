@@ -8,8 +8,8 @@ avgEventsPerDayScript = $.trim(avgEventsPerDayScript);
 var avgEventsPerDayData = {}
 var dailyobj = {}
 
-//send out api request      
-MP.api.jql(avgEventsPerDayScript).done(function(results) {     
+//send out api request
+MP.api.jql(avgEventsPerDayScript).done(function(results) {
 
   //add values to header panel for average events today
   var lastValue = results.length -1
@@ -19,21 +19,21 @@ MP.api.jql(avgEventsPerDayScript).done(function(results) {
   if(headerData < 11){             //if the number of avg events per user is less than 11 make the box red
     $('#avg-events').parent().parent().parent().parent().attr('class','panel panel-red')
   }
-  
+
   //transform data to get it ready for charting
   _.each(results, function(value, key){
     dailyobj[value.key[0]] = parseFloat((value.value.sum/value.value.count).toFixed(2))
-  }) 
+  })
   //final data transformation befor charting
-  avgEventsPerDayData.Average_Events = dailyobj 
+  avgEventsPerDayData.Average_Events = dailyobj
 
-  // Create a line chart      
+  // Create a line chart
   var avgEventsPerDayChart = $('#avg-events-per-user-per-day-chart').MPChart({chartType: 'line', highchartsOptions: {
     legend: {
       enabled: true,
       y: -7
     }
-  }});                                  
-avgEventsPerDayChart.MPChart('setData', avgEventsPerDayData); // Set the chart's data
+  }});
+  avgEventsPerDayChart.MPChart('setData', avgEventsPerDayData); // Set the chart's data
+  $('#avg-per-user-header').show()
 })
-$('#avg-per-user').show()

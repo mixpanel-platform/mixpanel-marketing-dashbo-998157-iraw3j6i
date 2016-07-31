@@ -42,6 +42,7 @@ var campaignProperty = 'utm_campaign'
 
 var topWebEventsScript = $('#jql-top-web-events').html();
 topWebEventsScript = $.trim(topWebEventsScript)
+$('#marketing-table-header').show() //show the header to loading visual makes sense
 
 MP.api.jql(topWebEventsScript).done(function(results) { //run top events query
   _.each(results[0], function(event){
@@ -238,7 +239,8 @@ MP.api.jql(topWebEventsScript).done(function(results) { //run top events query
                   theme: 'blue'
                 })
                 .tablesorterPager(pagerOptions);
-                $('#pager-controls').show()
+                $('#loading-container').hide()
+                $('.dropdown').show()
                 $('#table-edit').show()
                 $('[data-toggle="tooltip"]').tooltip()
                 $("#export").show()

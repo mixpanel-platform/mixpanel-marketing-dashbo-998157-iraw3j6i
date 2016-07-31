@@ -6,8 +6,8 @@ campaignAvgEventScript = $.trim(campaignAvgEventScript);
 var campaignlist =[]
 var avgEventsData = {}
 
-//send out api request      
-MP.api.jql(campaignAvgEventScript).done(function(results) {     
+//send out api request
+MP.api.jql(campaignAvgEventScript).done(function(results) {
 
 _.each(results, function(value){    //get all the campaign name and add them to an array to be used later
   campaignlist.push(value.key[0])
@@ -28,8 +28,8 @@ _.each(avgEventsData, function(objValue, objkey){
 
   avgEventsData[objkey] = placehoder
 
-}) 
-// Create a line chart      
+})
+// Create a line chart
 var avgEventsChart = $('#events-per-user-per-campaign-chart').MPChart({chartType: 'line', highchartsOptions: {
   legend: {
     enabled: false,
@@ -37,11 +37,11 @@ var avgEventsChart = $('#events-per-user-per-campaign-chart').MPChart({chartType
     x: 20,
     useHTML:true,
     labelFormatter: function() {
-    
+
      return   '<span class="legend-title">'+this.name+'</span>';
     }
   }
-}});                                  
-avgEventsChart.MPChart('setData', avgEventsData); // Set the chart's data
+}});
+  avgEventsChart.MPChart('setData', avgEventsData); // Set the chart's data
+  $('#avg-campaign-header').show()
 })
-$('#avg-campaign').show()

@@ -22,7 +22,7 @@ MP.api.jql(
     .filter(function(item){
       if (item.value < 6){
         return item
-      } 
+      }
     })
     .groupBy(['key.1', 'key.2'], mixpanel.reducer.count())
   },
@@ -43,30 +43,30 @@ params).done(function(bounceResults){
       campaignlist.push(value.key[0])
     })
     //get all the campaign name and add them to an array to be used later
-    _.each(bounceResults, function(value){    
+    _.each(bounceResults, function(value){
       campaignlist.push(value.key[0])
     })
     //get unique values
-    campaignlist = _.uniq(campaignlist) 
+    campaignlist = _.uniq(campaignlist)
 
     //start creating a object in the correct format be accepted by MPChart
-    _.each(campaignlist, function(values, key){     
+    _.each(campaignlist, function(values, key){
       graphingData[values] = {}
     })
-    
-   var monthlyData ={} 
+
+   var monthlyData ={}
    //combine the bounced and nonbounce data to get a bounce rate
-    _.each(bounceResults, function (bounceValue, bounceKey) {            
+    _.each(bounceResults, function (bounceValue, bounceKey) {
       _.each(nonBounceResults, function(nonBounceValue, nonBounceKey){
         if(bounceValue.key[0] === nonBounceValue.key[0] && bounceValue.key[1] === nonBounceValue.key[1]){ // if the campaign name and the date match calculate the bounce rate
-          bounceRate = parseFloat(((bounceValue.value/nonBounceValue.value)).toFixed(2))   
+          bounceRate = parseFloat(((bounceValue.value/nonBounceValue.value)).toFixed(2))
           graphingData[bounceValue.key[0]][nonBounceValue.key[1]] = bounceRate
-         
-          
+
+
         }
       })
     })
-    
+
 
   var mauChart = $('#campaign-bounce-rate').MPChart({chartType: 'line', highchartsOptions: {
     legend: {
@@ -75,6 +75,6 @@ params).done(function(bounceResults){
     }
   }});                                // Create a line chart
   mauChart.MPChart('setData', graphingData); // Set the chart's data
-  
+  $('#bounce-rate-header').show()
   })//end of second jql query
 }) // end of first jql query
