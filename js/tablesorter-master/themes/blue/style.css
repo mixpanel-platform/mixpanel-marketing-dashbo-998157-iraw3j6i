@@ -21,7 +21,8 @@ table.tablesorter thead tr th, table.tablesorter tfoot tr th {
 	vertical-align: middle;
 	border-radius: 5px 5px 0 0;
 	border-bottom: 1px solid #bfcfda;
-	color: #838ca2
+	color: #838ca2;
+	padding-right: 10px;
 
 }
 table.tablesorter thead tr .header {
