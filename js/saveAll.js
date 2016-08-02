@@ -33,7 +33,7 @@ $('#save-all-confirm').on('click',function(){
     console.log('JSON version of data',stringVersion);
     var encoded = window.btoa(stringVersion)
     $.ajax({
-      url: "http://api.mixpanel.com/track/?data="+encoded
+      url: "https://api.mixpanel.com/track/?data="+encoded
     })
   }
   queuedDataForSaving = []
