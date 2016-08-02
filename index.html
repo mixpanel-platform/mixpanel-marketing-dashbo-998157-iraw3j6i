@@ -250,30 +250,70 @@
         </div>
       </div>
     </div>
-  <!--dialogue modal for entering revenue-->
-  <div class="modal fade" id="revenue-modal"><!--.modal -->
-    <div class="modal-dialog" role="document"><!--.modal-dialog -->
-      <div class="modal-content"><!--.modal-content -->
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-          <h4 class="modal-title text-center">Edit Campaign Spend</h4>
-        </div>
-        <div class="modal-body">
-          <p class="text-muted text-uppercase"><b>Campaign Amount: </b><input type="text" name="Enter Campaign spend" id='campaign-spend-input'></p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn save-btn" data-dismiss="modal" id="camp-spend-modal-save">Save changes</button>
-          <button type="button" class="btn close-btn" data-dismiss="modal">Close</button>
-        </div>
-      </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-  </div><!-- /.modal -->
-  <script type="text/javascript">
-    var reportSettings = {}
-  </script>
-  <!-- enable editing of the campaign spend section of the marketing table-->
+    <!--dialogue modal for entering revenue-->
+    <div class="modal fade" id="revenue-modal"><!--.modal -->
+      <div class="modal-dialog" role="document"><!--.modal-dialog -->
+        <div class="modal-content"><!--.modal-content -->
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <h4 class="modal-title text-center">Edit Campaign Spend</h4>
+          </div>
+          <div class="modal-body">
+            <p class="text-muted text-uppercase"><b>Campaign Amount: </b><input type="text" name="Enter Campaign spend" id='campaign-spend-input'></p>
+          </div>
+          <div class="modal-footer">
+            <div class="col-xs-6">
+              <p class="text-muted text-center bottom-align-text" style="font-size: 8px"><i>In order for changes to table to be saved you must save the full dashboard at the bottom of the page</i></p>
+            </div>
+            <button type="button" class="btn close-btn" data-dismiss="modal">Close</button>
+            <button type="button" class="btn save-btn" data-dismiss="modal" id="camp-spend-modal-save">Update Spend</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+    <!--dialogue modal for universal saving-->
+    <div class="modal fade" id="save-all-modal"><!--dialogue modal for universal saving-->
+      <div class="modal-dialog" role="document"><!--.modal-dialog -->
+        <div class="modal-content"><!--.modal-content -->
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <h4 class="modal-title text-center">Save Dashboard</h4>
+          </div>
+          <div class="modal-body">
+            <p class="text-muted text-uppercase"><b>Project Token: </b><input type="text" name="Enter Project Token" id='project-token-input'></p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn save-btn" data-dismiss="modal" id="save-all-confirm">Save changes</button>
+            <button type="button" class="btn close-btn" data-dismiss="modal">Close</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!--end dialogue modal for universal saving-->
+    <div class="row">
+      <div class="col-sm-12">
+        <button type="button" name="button" class="mp-button" id="save-all">Save</button>
+      </div>
+    </div>
+    <!-- space for some global variables -->
+    <script type="text/javascript">
+      //set a global object to store all graphing data to be sent later
+      var savedData = {}
+      //global var to store entered campaign spend from marketing table
+      var campaignAmount
+      //global var to store campaign being edited from marketing table
+      var campaignEdited
+      //global for store data that needs to be saved
+      var queuedDataForSaving =[]
+      //global placeholder to push changes into queuedDataForSaving array
+      var changeDetails
+    </script>
+    <!-- enable saving of the dashboard-->
+    <script type="text/javascript" src="js/saveAll.js"></script>
+    <!-- enable editing of the campaign spend section of the marketing table-->
     <script type="text/javascript" src="js/editRevenue.js"></script>
     <!-- enable linking out to mixpanel reports -->
     <script type="text/javascript" src="js/linkOuts.js"></script>
@@ -404,33 +444,33 @@
     <script type="text/javascript" id='revenue-jql'>
       var today = new Date().toISOString().split('T')[0]
 
-      var a = new Date();
-      var beginingOfMonth  = new Date(a.getFullYear(), a.getMonth(), 1).toISOString().split('T')[0];
+      var d = new Date();
+      d.setMonth(d.getMonth() - 1);
+      var aMonthAgo = new Date(d).toISOString().split("T")[0]
 
       function main() {
-          return Events({
-            from_date: beginingOfMonth,
-            to_date:   today
+        return Events({
+          from_date: aMonthAgo,
+          to_date:   today
 
-          })
-          .filter(function(event){
-            //change this value to the property where revenue is stored
-            var type = event.properties["$revenue"]
-            type = typeof type
-            if (type === "number"){
-              return event
-            }
-          })
-          // change this value if your utm campaign params are different
-          .groupBy(["properties.utm_campaign"], mixpanel.reducer.sum(
-              function(event){
-                //change this value to the property where revenue is stored
-                  //change this value to the property where revenue is stored
-                if(event.properties["utm_campaign"] !== "undefined"){
-                  return event.properties["$revenue"]
-                }
+        })
+        .filter(function(event){
+          //change this value to the property where revenue is stored
+          var type = event.properties["$revenue"]
+          type = typeof type
+          if (type === "number"){
+            return event
+          }
+        })
+        // change this value if your utm campaign params are different
+        .groupBy(["properties.utm_campaign"], mixpanel.reducer.sum(
+            function(event){
+              //change this value to the property where revenue is stored
+              if(event.properties["utm_campaign"] !== "undefined"){
+                return event.properties["$revenue"]
               }
-            ))
+            }
+          ))
       }
     </script>
     <!-- jql for events by campaign by user -->
@@ -557,6 +597,5 @@
     <script type="text/javascript" src="js/tableEdit.js"></script>
     <!-- bounce rates by campaign graphing-->
     <script type="text/javascript" src="js/bounceRatesByCampaign.js"></script>
-
   </body>
 </html>

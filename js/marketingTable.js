@@ -19,7 +19,6 @@ revenueScript = $.trim(revenueScript)
 var revenueObj = {}
 // JQL query to get revenue by campaign source
 MP.api.jql(revenueScript).done(function(revenue){
-
   _.each(revenue, function(v, k){     //match the campaigns to returned revenue, if revenue is null do not include. Will be marked as 0 later
     if(v.key[0] !== null){
       revenueObj[v.key[0]] = v.value
@@ -118,19 +117,39 @@ MP.api.jql(topWebEventsScript).done(function(results) { //run top events query
             MP.api.jql(savedCampaignSpend).done(function(results) {
               var campaignData = []
               _.each(results, function(eventDetails, events){
-                campaignData.push(eventDetails.properties.details)
+                var obj = {
+                  campaign: eventDetails.properties.details.campaign,
+                  spend: eventDetails.properties.details.spend,
+                  date_saved: eventDetails.time
+                }
+                campaignData.push(obj)
+              })
+              var oldTimeObj = {} //set a placeholder variable for the time that the user last change the campaign spend of a campaign
+              _.each(topCampaigns, function(campaignName, index){
+                oldTimeObj[campaignName] = 0
               })
               //loop through the current data set and the new RIO info to see if we have previously set campaign spends. if we do make sure to set them in the campaign spend column and calculate the roi
               _.each(dataSet, function(array, index){
                 _.each(campaignData, function(campaignObj, indexObj){
                   if(array[0] === campaignObj['campaign']){
-                    dataSet[index][7] = addCommas(campaignObj['spend'])  // if one of the campaigns from the jql query matached a campiagn from the array add the spend for that campaign to the dataSet array before the graph is made
-                    var campaignSpend = campaignObj['spend']  // set the matched campaign spend to a variable to make it easier to read
-
-                    var revenue = parseInt(dataSet[index][8].replace(/,/g , ""))
-
-                    var roiCalc = (((revenue-campaignSpend)/campaignSpend)*100).toFixed(0) +"%"   //calculate ROI
-                    dataSet[index][9] = roiCalc                                         //set the calculated ROI to array so it is diplayed when the chart is updated
+                    var campaignNamePlaceholder = campaignObj['campaign']
+                    var lastSavedTime = campaignObj['date_saved']
+                    //need to make it so that we check to see if the old time is greater or less than new time. if the new time is greater (more recent), replace the campaign spend since this was the more recently saved value
+                    _.each(oldTimeObj, function (time, name) {
+                      if (campaignNamePlaceholder === name && lastSavedTime >= oldTimeObj[campaignNamePlaceholder]) {
+                        oldTimeObj[campaignNamePlaceholder] = lastSavedTime        //set the placeholder saved time object so that the new time is saved for comparison later
+                        dataSet[index][7] = addCommas(campaignObj['spend'])          // if one of the campaigns from the jql query matached a campiagn from the array add the spend for that campaign to the dataSet array before the graph is made
+                        var campaignSpend = campaignObj['spend']                    // set the matched campaign spend to a variable to make it easier to read
+                        var revenue
+                        if(typeof dataSet[index][8] === 'number'){                  // make sure the value returned is actually a string before running replace on the value
+                          revenue = dataSet[index][8]
+                        }else {
+                          revenue = parseInt(dataSet[index][8].replace(/,/g , ""))
+                        }
+                        var roiCalc = (((revenue-campaignSpend)/campaignSpend)*100).toFixed(0) +"%"   //calculate ROI
+                        dataSet[index][9] = roiCalc                                         //set the calculated ROI to array so it is diplayed when the chart is updated
+                      }
+                    })
                   }
                 })
               })
