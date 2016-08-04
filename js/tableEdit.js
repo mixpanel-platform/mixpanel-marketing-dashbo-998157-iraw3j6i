@@ -25,13 +25,15 @@ $('#table-edit-button').click(function() {
 	}else {
 		selectorOptions.items = selectorOptions.items;
 	}
-
+	console.log("currnet value of the selector object", selectorOptions);
 	$('#table-edit-button').hide() 									// hide edit button
 	//show the selector helper text
 	$('#selector-text').show()
+	$('#table-edit-section').append('<div class="col-sm-6" id="table-selector"></div>')
+
 	var editTable = $('#table-selector').MPSelect(selectorOptions); //create events selector dropdown
 	//show the selector button
-	$('#table-selector').show()
+	//$('#table-selector').show()
 	editTable.on('change', function(e, selection) {         // Do something when one of the event drop downs are selected
       removedEvent = selection
       var tableRows = $('th')
@@ -41,7 +43,8 @@ $('#table-edit-button').click(function() {
   	  		headerLocation = key; 					//get the corresponding header number to later change this value to the new event
       	}
       })
-      $("#table-selector").hide()		//high the selector containing the events in the table once the user has selected the event they want to change
+			$("#table-selector").remove()
+			//$("#table-selector").hide()		//high the selector containing the events in the table once the user has selected the event they want to change
       $('#selector-text').html('Event to add. Replacing "'+removedEvent+'"')
       $('#new-event').show()
   	});
