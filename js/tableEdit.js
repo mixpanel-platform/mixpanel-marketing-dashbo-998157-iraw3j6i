@@ -13,6 +13,7 @@ newEventSelector = $('#new-event').MPEventSelect()
 $('#table-edit-button').click(function() {
 
 	//transform the top topEvents array so that it can be placeed in the new dropdown menu
+	//check to see if chart has been edit at least once, if so selectorOptions already has some set values so use those values to populate dropdown. if this is the first edit in the session populate the selector with the top 5 events in the project
 	if(selectorOptions.items == undefined){
 		selectorOptions.items = [
 			{label: 'Select Event', value: "Select Event"},
@@ -25,7 +26,6 @@ $('#table-edit-button').click(function() {
 	}else {
 		selectorOptions.items = selectorOptions.items;
 	}
-	console.log("currnet value of the selector object", selectorOptions);
 	$('#table-edit-button').hide() 									// hide edit button
 	//show the selector helper text
 	$('#selector-text').show()
